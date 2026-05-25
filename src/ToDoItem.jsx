@@ -1,7 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 
-const ToDoItem = ({ item, onToDoToggleIsChecked, onToDoDelete }) => {
-  return (
+const ToDoItem = ({
+  item,
+  onToDoToggleIsChecked,
+  onToDoDelete,
+  onToDoTextUpdate,
+}) => {
+  const [showEditToDo, setshowEditToDo] = useState(false);
+  function handleEditToDo(e) {}
+
+  function handleFormEdittedSubmitted(e) {
+    e.preventDefault();
+    const toDoText = e.target["todo"].value;
+    onToDoTextUpdate(item.id, toDoText);
+    setshowEditToDo(false);
+  }
+  const toDoEditForm = (
+    <div>
+      <form onSubmit={handleFormEdittedSubmitted}>
+        <input type="text" name="todo" defaultValue={item.text} />
+        <button>Update</button>
+      </form>
+      <button onClick={() => setshowEditToDo(false)}>Cancel</button>
+    </div>
+  );
+
+  const toDoItemDIV = (
     <div>
       <input
         id={item.id}
@@ -13,10 +37,13 @@ const ToDoItem = ({ item, onToDoToggleIsChecked, onToDoDelete }) => {
         htmlFor={item.id}
       >
         {item.text}
-        <button onClick={() => onToDoDelete(item.id)}>Delete</button>
       </label>
+      <button onClick={() => setshowEditToDo(true)}>Edit</button>
+      <button onClick={() => onToDoDelete(item.id)}>Delete</button>
     </div>
   );
+
+  return <div>{showEditToDo ? toDoEditForm : toDoItemDIV}</div>;
 };
 
 export default ToDoItem;

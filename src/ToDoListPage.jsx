@@ -37,6 +37,21 @@ const ToDoListPage = () => {
   }
 
   const emptyState = <h3>Nothing is here, Add a Todo</h3>;
+  const completedToDos = todos.filter((item) => item.completed).length;
+
+  function handleAllDeleteOperation() {
+    setTodos([]);
+  }
+
+  function handleUpdateToDoText(id, toDoText) {
+    const newToDos = todos.map((item) => {
+      if (item.id === id) {
+        return { ...item, text: toDoText };
+      }
+      return item;
+    });
+    setTodos(newToDos);
+  }
 
   return (
     <div>
@@ -46,6 +61,16 @@ const ToDoListPage = () => {
         <button>Submit</button>
       </form>
 
+      {todos.length > 0 && (
+        <button onClick={handleAllDeleteOperation}>Delete All Tasks</button>
+      )}
+
+      {todos.length > 0 && (
+        <p>
+          {completedToDos} / {todos.length} Completed
+        </p>
+      )}
+
       {todos.length > 0 ? (
         <div>
           {todos.map((item) => (
@@ -54,6 +79,7 @@ const ToDoListPage = () => {
               item={item}
               onToDoToggleIsChecked={handleOnToDoToggleIsChecked}
               onToDoDelete={handleOnToDoDelete}
+              onToDoTextUpdate={handleUpdateToDoText}
             />
           ))}
         </div>
