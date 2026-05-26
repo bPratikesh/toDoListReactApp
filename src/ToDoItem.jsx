@@ -5,6 +5,10 @@ const ToDoItem = ({
   onToDoToggleIsChecked,
   onToDoDelete,
   onToDoTextUpdate,
+  onMoveUp,
+  onMoveDown,
+  index,
+  toDosCount,
 }) => {
   const [showEditToDo, setshowEditToDo] = useState(false);
   function handleEditToDo(e) {}
@@ -27,6 +31,15 @@ const ToDoItem = ({
 
   const toDoItemDIV = (
     <div>
+      <button disabled={index == 0} onClick={() => onMoveUp(index)}>
+        ▲
+      </button>
+      <button
+        disabled={index == toDosCount - 1}
+        onClick={() => onMoveDown(index)}
+      >
+        ▼
+      </button>
       <input
         id={item.id}
         type="checkbox"

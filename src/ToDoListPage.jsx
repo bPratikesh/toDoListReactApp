@@ -53,6 +53,26 @@ const ToDoListPage = () => {
     setTodos(newToDos);
   }
 
+  function handleToDoMoveUp(index) {
+    if (index == 0) return;
+    const newToDos = [...todos];
+    [newToDos[index], newToDos[index - 1]] = [
+      newToDos[index - 1],
+      newToDos[index],
+    ]; //logic of swapping in java script
+    setTodos(newToDos);
+  }
+
+  function handleToDoMoveDown(index) {
+    if (index == todos.length - 1) return;
+    const newToDos = [...todos];
+    [newToDos[index], newToDos[index + 1]] = [
+      newToDos[index + 1],
+      newToDos[index],
+    ]; //logic of swapping in java script
+    setTodos(newToDos);
+  }
+
   return (
     <div>
       <h1>Super To Do</h1>
@@ -73,13 +93,17 @@ const ToDoListPage = () => {
 
       {todos.length > 0 ? (
         <div>
-          {todos.map((item) => (
+          {todos.map((item, index) => (
             <ToDoItem
               key={item.id}
               item={item}
               onToDoToggleIsChecked={handleOnToDoToggleIsChecked}
               onToDoDelete={handleOnToDoDelete}
               onToDoTextUpdate={handleUpdateToDoText}
+              onMoveUp={handleToDoMoveUp}
+              onMoveDown={handleToDoMoveDown}
+              index={index}
+              toDosCount={todos.length}
             />
           ))}
         </div>
