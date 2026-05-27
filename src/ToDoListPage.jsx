@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import ToDoItem from "./ToDoItem";
+import { PackageOpen, Plus, Trash } from "lucide-react";
 
 const ToDoListPage = () => {
   const [todos, setTodos] = useState([]);
@@ -8,7 +9,7 @@ const ToDoListPage = () => {
   function handleFormSubmit(e) {
     e.preventDefault(); //for some browser on click of submit button the page refreshes, to avoid that call preventDefault method
     const toDoText = e.target["todo"].value;
-    console.log(toDoText);
+    if (!toDoText) return;
     const newTodos = [
       ...todos,
       {
@@ -36,7 +37,14 @@ const ToDoListPage = () => {
     setTodos(newToDos);
   }
 
-  const emptyState = <h3>Nothing is here, Add a Todo</h3>;
+  const emptyState = (
+    <div className="mt-20 flex flex-col gap-8 items-center">
+      <PackageOpen size={40} />
+      <h1 className="font-bold text-secondary">No Todos yet</h1>
+      <p className="text-secondary">Tap + to add your first task.</p>
+    </div>
+  );
+
   const completedToDos = todos.filter((item) => item.completed).length;
 
   function handleAllDeleteOperation() {
@@ -44,6 +52,7 @@ const ToDoListPage = () => {
   }
 
   function handleUpdateToDoText(id, toDoText) {
+    if (!toDoText) return;
     const newToDos = todos.map((item) => {
       if (item.id === id) {
         return { ...item, text: toDoText };
@@ -74,25 +83,48 @@ const ToDoListPage = () => {
   }
 
   return (
-    <div>
-      <h1>Super To Do</h1>
-      <form onSubmit={handleFormSubmit}>
-        <input type="text" name="todo" placeholder="Enter your todo here..." />
-        <button>Submit</button>
+    <div className="max-w-2xl mx-auto p-10 lg:p-12 space-y-6">
+      <h1 className="text-center font-display text-6xl font-bold text-primary">
+        Super To Do
+      </h1>
+      <form
+        className=" bg-gray-800 px-6 py-4 rounded-lg flex justify-between gap-4"
+        onSubmit={handleFormSubmit}
+      >
+        <input
+          type="text"
+          name="todo"
+          autoComplete="off"
+          required
+          placeholder="Enter your todo here..."
+          className="flex-1 font-body focus:outline-none"
+        />
+        <button className="p-3 bg-primary text-black rounded-lg cursor-pointer hover:bg-primary-hover">
+          <Plus />
+        </button>
       </form>
 
-      {todos.length > 0 && (
-        <button onClick={handleAllDeleteOperation}>Delete All Tasks</button>
-      )}
+      <div className="flex justify-end">
+        {todos.length > 0 && (
+          <button
+            className="px-3 py-2 ring-2 ring-red-400 rounded-lg flex items-center gap-2 hover:bg-red-500 hover:text-black"
+            onClick={handleAllDeleteOperation}
+          >
+            <Trash />
+            Delete All Tasks
+          </button>
+        )}
+      </div>
 
       {todos.length > 0 && (
-        <p>
-          {completedToDos} / {todos.length} Completed
+        <p className="text-secondary text-right">
+          <span className="text-green-200">{completedToDos}</span> /{" "}
+          {todos.length} Completed
         </p>
       )}
 
       {todos.length > 0 ? (
-        <div>
+        <div className="space-y-4">
           {todos.map((item, index) => (
             <ToDoItem
               key={item.id}
